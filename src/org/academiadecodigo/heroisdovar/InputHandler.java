@@ -1,6 +1,7 @@
-package org.academiadecodigo.heroisdoVAR;
+package org.academiadecodigo.heroisdovar;
 
-import org.academiadecodigo.simplegraphics.graphics.Color;
+import org.academiadecodigo.heroisdovar.grid.Cursor;
+import org.academiadecodigo.heroisdovar.grid.Grid;
 import org.academiadecodigo.simplegraphics.keyboard.Keyboard;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEvent;
 import org.academiadecodigo.simplegraphics.keyboard.KeyboardEventType;
@@ -20,7 +21,7 @@ public class InputHandler implements KeyboardHandler {
     }
 
     private void createEvents(){
-        events = new KeyboardEvent[10];
+        events = new KeyboardEvent[11];
 
         for(int i = 0; i < events.length; i++) {
             events[i] = new KeyboardEvent();
@@ -34,15 +35,16 @@ public class InputHandler implements KeyboardHandler {
         events[5].setKey(KeyboardEvent.KEY_C);
         events[6].setKey(KeyboardEvent.KEY_L);
         events[7].setKey(KeyboardEvent.KEY_S);
-        events[8].setKey(KeyboardEvent.KEY_ESC);
-        events[9].setKey(KeyboardEvent.KEY_SPACE);
+        events[8].setKey(KeyboardEvent.KEY_R);
+        events[9].setKey(KeyboardEvent.KEY_ESC);
+        events[10].setKey(KeyboardEvent.KEY_SPACE);
 
         for(int i = 0; i < events.length - 1; i++) {
             events[i].setKeyboardEventType(KeyboardEventType.KEY_PRESSED);
             keyboard.addEventListener(events[i]);
         }
-        events[9].setKeyboardEventType(KeyboardEventType.KEY_RELEASED);
-        keyboard.addEventListener(events[9]);
+        events[10].setKeyboardEventType(KeyboardEventType.KEY_RELEASED);
+        keyboard.addEventListener(events[10]);
 
     }
 
@@ -53,30 +55,63 @@ public class InputHandler implements KeyboardHandler {
         int cursorRow = cursor.getY() / Grid.CELL_SIZE;
 
         switch (keyboardEvent.getKey()) {
+
             case KeyboardEvent.KEY_UP:
-                if(cursor.getY() != Grid.PADDING) {
-                    if(spacePressed) Grid.cells[cursorCol][cursorRow].fill(Grid.cells[cursorCol][cursorRow].getColor() != cursor.getColor() ? cursor.getColor() : Color.WHITE);
-                    cursor.translate(0, -Grid.CELL_SIZE);
+
+                if (cursor.getY() == Grid.PADDING)
+                    break;
+
+                if (spacePressed) {
+                    Grid.cells[cursorCol][cursorRow].erase();
+                } else {
+                    Grid.cells[cursorCol][cursorRow].paint(cursor.getColor());
                 }
+
+                cursor.move(0, -Grid.CELL_SIZE);
                 break;
+
             case KeyboardEvent.KEY_RIGHT:
-                if(cursor.getX() != Grid.cells[Grid.cols - 1][0].getX()) {
-                    if (spacePressed) Grid.cells[cursorCol][cursorRow].fill(Grid.cells[cursorCol][cursorRow].getColor() != cursor.getColor() ? cursor.getColor() : Color.WHITE);
-                    cursor.translate(Grid.CELL_SIZE, 0);
+
+                if (cursor.getX() == Grid.cells[Grid.cols - 1][0].getX())
+                    break;
+
+                if (spacePressed) {
+                    Grid.cells[cursorCol][cursorRow].erase();
+                } else {
+                    Grid.cells[cursorCol][cursorRow].paint(cursor.getColor());
                 }
+
+                cursor.move(Grid.CELL_SIZE, 0);
                 break;
+
             case KeyboardEvent.KEY_DOWN:
-                if(cursor.getY() != Grid.cells[0][Grid.rows - 1].getY()) {
-                    if (spacePressed) Grid.cells[cursorCol][cursorRow].fill(Grid.cells[cursorCol][cursorRow].getColor() != cursor.getColor() ? cursor.getColor() : Color.WHITE);
-                    cursor.translate(0, Grid.CELL_SIZE);
+
+                if (cursor.getY() == Grid.cells[0][Grid.rows - 1].getY())
+                    break;
+
+                if (spacePressed) {
+                    Grid.cells[cursorCol][cursorRow].erase();
+                } else {
+                    Grid.cells[cursorCol][cursorRow].paint(cursor.getColor());
                 }
+
+                cursor.move(0, Grid.CELL_SIZE);
                 break;
+
             case KeyboardEvent.KEY_LEFT:
-                if(cursor.getX() != Grid.PADDING) {
-                    if (spacePressed) Grid.cells[cursorCol][cursorRow].fill(Grid.cells[cursorCol][cursorRow].getColor() != cursor.getColor() ? cursor.getColor() : Color.WHITE);
-                    cursor.translate(-Grid.CELL_SIZE, 0);
+
+                if (cursor.getX() == Grid.PADDING)
+                    break;
+
+                if (spacePressed) {
+                    Grid.cells[cursorCol][cursorRow].erase();
+                } else {
+                    Grid.cells[cursorCol][cursorRow].paint(cursor.getColor());
                 }
+
+                cursor.move(-Grid.CELL_SIZE, 0);
                 break;
+
             case KeyboardEvent.KEY_SPACE:
                 spacePressed = true;
                 break;
@@ -84,10 +119,13 @@ public class InputHandler implements KeyboardHandler {
                 cursor.changeColor();
                 break;
             case KeyboardEvent.KEY_L:
-                Grid.load();
+                FileManager.load();
                 break;
             case KeyboardEvent.KEY_S:
-                Grid.save();
+                FileManager.save();
+                break;
+            case KeyboardEvent.KEY_R:
+                Grid.clear();
                 break;
             case KeyboardEvent.KEY_ESC:
                 System.exit(1);
@@ -96,20 +134,13 @@ public class InputHandler implements KeyboardHandler {
                 break;
         }
 
-        cursor.fill();
     }
 
     @Override
     public void keyReleased(KeyboardEvent keyboardEvent) {
 
-        switch (keyboardEvent.getKey()) {
+        if (keyboardEvent.getKey() == KeyboardEvent.KEY_SPACE)
+            spacePressed = false;
 
-            case KeyboardEvent.KEY_SPACE:
-                spacePressed = false;
-                break;
-            default:
-                break;
-
-        }
     }
 }
