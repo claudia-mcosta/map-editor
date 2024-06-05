@@ -1,9 +1,22 @@
 package org.academiadecodigo.heroisdovar.grid;
 
+import org.academiadecodigo.simplegraphics.graphics.Color;
+
+import java.util.Arrays;
+import java.util.List;
+
 public class Grid {
 
     public final static int PADDING = 10;
     public final static int CELL_SIZE = 20;
+    public final static List<Color> COLORS = Arrays.asList(
+            Color.RED,
+            Color.GREEN,
+            Color.BLUE,
+            Color.MAGENTA,
+            Color.BLACK
+    );
+
     public static int cols;
     public static int rows;
     public static GridCell[][] cells;

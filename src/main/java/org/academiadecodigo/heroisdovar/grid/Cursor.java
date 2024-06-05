@@ -8,16 +8,16 @@ import org.academiadecodigo.simplegraphics.graphics.Ellipse;
 public class Cursor extends Cell {
 
     private Ellipse tracker;
-    private InputHandler inputHandler;
 
     public Cursor() {
         super(0, 0);
-        this.inputHandler = new InputHandler(this);
+
+        new InputHandler(this);
 
         double trackerSize = Grid.CELL_SIZE / 1.5;
         this.tracker = new Ellipse(trackerSize, trackerSize, trackerSize, trackerSize);
 
-        paint(MapEditor.colors.get(0));
+        paint(Grid.COLORS.get(0));
     }
 
     @Override
@@ -36,12 +36,12 @@ public class Cursor extends Cell {
 
     public void changeColor() {
 
-        int colorIndex = MapEditor.colors.indexOf(getColor()) + 1;
+        int colorIndex = Grid.COLORS.indexOf(getColor()) + 1;
 
-        if (colorIndex == MapEditor.colors.size()) {
+        if (colorIndex == Grid.COLORS.size()) {
             colorIndex = 0;
         }
 
-        paint(MapEditor.colors.get(colorIndex));
+        paint(Grid.COLORS.get(colorIndex));
     }
 }

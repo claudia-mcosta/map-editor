@@ -7,7 +7,7 @@ import java.io.*;
 
 public class FileManager {
 
-    private static final String filePath = "src/org/academiadecodigo/heroisdovar/resources/DestinationFile.txt";
+    private static final String filePath = "src/main/resources/destination-file.txt";
     public static void save() {
 
         StringBuilder string = new StringBuilder();
@@ -16,7 +16,7 @@ public class FileManager {
             for (int col = 0; col < Grid.cols; col++) {
 
                 Color cellColor = Grid.cells[row][col].getColor();
-                string.append(cellColor == Color.WHITE ? 0 : MapEditor.colors.indexOf(cellColor) + 1);
+                string.append(cellColor == Color.WHITE ? 0 : Grid.COLORS.indexOf(cellColor) + 1);
             }
             string.append("\n");
         }
@@ -56,7 +56,7 @@ public class FileManager {
                     color = Color.WHITE;
 
                     if (colorIndex != 0)
-                        color = MapEditor.colors.get(colorIndex - 1);
+                        color = Grid.COLORS.get(colorIndex - 1);
 
                     Grid.cells[row][col].paint(color);
                 }
